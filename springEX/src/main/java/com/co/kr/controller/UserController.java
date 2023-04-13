@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.co.kr.domain.BoardListDomain;
+import com.co.kr.domain.MyBoardListDomain;
 import com.co.kr.domain.LoginDomain;
+import com.co.kr.service.MyUploadService;
 import com.co.kr.service.UploadService;
 import com.co.kr.service.UserService;
 import com.co.kr.util.CommonUtils;
@@ -30,10 +32,11 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private UploadService uploadService;
-
+	@Autowired
+	private MyUploadService myUploadService;
+	
 	@RequestMapping(value = "board")
 	public ModelAndView login(LoginVO loginDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
@@ -83,6 +86,15 @@ public class UserController {
 		System.out.println("items ==> "+ items);
 		mav.addObject("items", items);
 		mav.setViewName("board/boardList.html");
+		return mav; 
+	}
+	@RequestMapping(value = "mybdList")
+	public ModelAndView mybdList() { 
+		ModelAndView mav = new ModelAndView();
+		List<MyBoardListDomain> items = myUploadService.boardList();
+		System.out.println("items ==> "+ items);
+		mav.addObject("items", items);
+		mav.setViewName("myboard/boardList.html");
 		return mav; 
 	}
 }
