@@ -1,6 +1,10 @@
 package com.co.kr.controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +77,7 @@ public class UserController {
 		session.setAttribute("ip",IP);
 		session.setAttribute("id", loginDomain.getMbId());
 		session.setAttribute("mbLevel", loginDomain.getMbLevel());
+		session.setAttribute("macAddress", getLocalMacAddress());
 				
 		List<BoardListDomain> items = uploadService.boardList();
 		System.out.println("items ==> "+ items);
@@ -317,4 +322,27 @@ public class UserController {
 		mav.setViewName("myboard/boardList.html");
 		return mav; 
 	}
+	public String getLocalMacAddress() {
+	 	String result = "";
+		InetAddress ip;
+
+		try {
+			ip = InetAddress.getLocalHost();
+		   
+			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+			byte[] mac = network.getHardwareAddress();
+		   
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < mac.length; i++) {
+				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+			}
+				result = sb.toString();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (SocketException e){
+			e.printStackTrace();
+		}
+		    
+		return result;
+	 }
 }
