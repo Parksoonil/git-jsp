@@ -322,6 +322,7 @@ public class UserController {
 		mav.setViewName("myboard/boardList.html");
 		return mav; 
 	}
+	
 	public String getLocalMacAddress() {
 	 	String result = "";
 		InetAddress ip;
